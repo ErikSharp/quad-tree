@@ -1,4 +1,4 @@
-import p5, { Vector } from "p5";
+import p5, { Vector, RECT_MODE } from "p5";
 import { Rectangle } from "./rectangle";
 import { Drawable } from "./drawable";
 import { Updatable } from "./updatable";
@@ -35,7 +35,9 @@ export class QuadTree implements Drawable, Updatable {
                 if (!this.northeast.insert(point)) {
                     if (!this.southeast.insert(point)) {
                         if (!this.southwest.insert(point)) {
-                            console.log("cannot insert");
+                            console.error(
+                                `cannot insert x:${point.x} y:${point.y}`
+                            );
                         }
                     }
                 }
@@ -81,13 +83,46 @@ export class QuadTree implements Drawable, Updatable {
         this.divided = true;
     }
 
+    query(range: Rectangle, arr: Vector[] = []): Vector[] {
+        if (!this.boundary.intersects(range)) {
+            return arr;
+        } else {
+            this.points.forEach((point) => {
+                if (range.contains(point)) {
+                    arr.push(point);
+                }
+            });
+
+            if (this.divided) {
+                this.northwest.query(range, arr);
+                this.northeast.query(range, arr);
+                this.southwest.query(range, arr);
+                this.southeast.query(range, arr);
+            }
+
+            return arr;
+        }
+    }
+
+    rect: Rectangle = new Rectangle(350, 350, 150, 150);
+
     update() {
         if (this.p.mouseIsPressed) {
-            this.insert(this.p.createVector(this.p.mouseX, this.p.mouseY));
+            for (let i = 0; i < 5; i++) {
+                this.insert(
+                    this.p.createVector(
+                        this.p.mouseX + this.p.random(-5, 5),
+                        this.p.mouseY + this.p.random(-5, 5)
+                    )
+                );
+            }
         }
     }
 
     draw() {
+        this.p.stroke(0, 255, 0);
+        this.p.rect(350, 350, 150, 150);
+
         this.p.stroke(255);
         this.p.noFill();
         this.p.rect(
@@ -98,6 +133,10 @@ export class QuadTree implements Drawable, Updatable {
         );
 
         this.points.forEach((point) => this.p.point(point.x, point.y));
+
+        this.p.stroke(0, 255, 0);
+        let points = this.query(this.rect);
+        points.forEach((point) => this.p.point(point.x, point.y));
 
         if (this.divided) {
             this.northeast.draw();

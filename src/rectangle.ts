@@ -18,7 +18,12 @@ export class Rectangle {
     }
 
     intersects(other: Rectangle): boolean {
-        return true;
+        return !(
+            other.x - other.width > this.x + this.width ||
+            other.x + other.width < this.x - this.width ||
+            other.y - other.height > this.y + this.height ||
+            other.y + other.height < this.y - this.height
+        );
     }
 
     toString() {

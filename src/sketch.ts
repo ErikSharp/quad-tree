@@ -14,17 +14,6 @@ export class Sketch implements Drawable, Updatable {
         let boundary = new Rectangle(0, 0, p.width, p.height);
         let tree = new QuadTree(p, boundary, 4);
 
-        // for (let i = 0; i < 500; i++) {
-        //     let point = p.createVector(p.random(p.width), p.random(p.height));
-        //     let inserted = tree.insert(point);
-        //     if (!inserted) {
-        //         console.log("boom!");
-        //         tree.insert(point);
-        //     }
-        // }
-
-        let foo = tree.getPoints().length;
-
         this.drawables.push(tree);
         this.updatables.push(tree);
     }
