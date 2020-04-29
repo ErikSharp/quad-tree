@@ -1,9 +1,8 @@
 import p5 from "p5";
 import { Drawable } from "./drawable";
 import { Updatable } from "./updatable";
-import { BouncyBox } from "./bouncyBox";
-import { Logo } from "./logo";
-import { Environment } from "./environment";
+import { Rectangle } from "./rectangle";
+import { QuadTree } from "./quadTree";
 
 export class Sketch implements Drawable, Updatable {
     updatables: Updatable[] = [];
@@ -12,20 +11,22 @@ export class Sketch implements Drawable, Updatable {
     constructor(private p: p5) {
         p.createCanvas(innerWidth * 0.8, innerHeight * 0.8);
 
-        let env = new Environment(p);
-        //the environment only updates
-        this.updatables.push(env);
+        let boundary = new Rectangle(0, 0, p.width, p.height);
+        let tree = new QuadTree(p, boundary, 4);
 
-        //the logo only draws
-        //the order of the drawables is their z-index
-        this.drawables.push(new Logo(p, env));
+        // for (let i = 0; i < 500; i++) {
+        //     let point = p.createVector(p.random(p.width), p.random(p.height));
+        //     let inserted = tree.insert(point);
+        //     if (!inserted) {
+        //         console.log("boom!");
+        //         tree.insert(point);
+        //     }
+        // }
 
-        for (let index = 0; index < 10; index++) {
-            let box = new BouncyBox(p);
-            //a BouncyBox should update and draw
-            this.updatables.push(box);
-            this.drawables.push(box);
-        }
+        let foo = tree.getPoints().length;
+
+        this.drawables.push(tree);
+        this.updatables.push(tree);
     }
 
     update() {
