@@ -1,6 +1,6 @@
-import p5, { Vector } from "p5";
+import { Point } from "./point";
 
-export class Rectangle {
+export class Rectangle<T extends Point> {
     constructor(
         public x: number,
         public y: number,
@@ -8,7 +8,7 @@ export class Rectangle {
         public height: number
     ) {}
 
-    contains(point: Vector): boolean {
+    contains(point: T): boolean {
         return (
             point.x >= this.x &&
             point.x < this.x + this.width &&
@@ -17,7 +17,7 @@ export class Rectangle {
         );
     }
 
-    intersects(other: Rectangle): boolean {
+    intersects(other: Rectangle<T>): boolean {
         return !(
             other.x - other.width > this.x + this.width ||
             other.x + other.width < this.x - this.width ||

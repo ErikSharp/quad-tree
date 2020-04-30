@@ -3,24 +3,35 @@ import { Drawable } from "./drawable";
 import { Updatable } from "./updatable";
 import { Rectangle } from "./rectangle";
 import { QuadTree } from "./quadTree";
+import { Point } from "./point";
 
 export class Sketch implements Drawable, Updatable {
     updatables: Updatable[] = [];
     drawables: Drawable[] = [];
-    tree: QuadTree;
+    tree: QuadTree<Point>;
 
     constructor(private p: p5) {
         p.createCanvas(innerWidth * 0.8, innerHeight * 0.8);
 
         let boundary = new Rectangle(0, 0, p.width, p.height);
-        this.tree = new QuadTree(p, boundary, 4);
+        this.tree = new QuadTree<Point>(p, boundary, 4);
 
         this.drawables.push(this.tree);
-        this.updatables.push(this.tree);
     }
 
     update() {
         this.updatables.forEach((u) => u.update());
+
+        if (this.p.mouseIsPressed) {
+            for (let i = 0; i < 5; i++) {
+                this.tree.insert(
+                    new Point(
+                        this.p.mouseX + this.p.random(-5, 5),
+                        this.p.mouseY + this.p.random(-5, 5)
+                    )
+                );
+            }
+        }
     }
 
     draw() {
