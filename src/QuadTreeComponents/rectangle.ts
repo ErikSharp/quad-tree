@@ -1,6 +1,6 @@
-import { Point } from "./point";
+import { VectorContainer } from "./vectorContainer";
 
-export class Rectangle<T extends Point> {
+export class Rectangle<T extends VectorContainer> {
     constructor(
         public x: number,
         public y: number,
@@ -10,10 +10,10 @@ export class Rectangle<T extends Point> {
 
     contains(point: T): boolean {
         return (
-            point.x >= this.x &&
-            point.x < this.x + this.width &&
-            point.y >= this.y &&
-            point.y < this.y + this.height
+            point.vector.x >= this.x &&
+            point.vector.x < this.x + this.width &&
+            point.vector.y >= this.y &&
+            point.vector.y < this.y + this.height
         );
     }
 

@@ -1,8 +1,8 @@
 import p5 from "p5";
 import { Drawable } from "./drawable";
 import { Updatable } from "./updatable";
-import { Rectangle } from "./rectangle";
-import { QuadTree } from "./quadTree";
+import { Rectangle } from "./QuadTreeComponents/rectangle";
+import { QuadTree } from "./QuadTreeComponents/quadTree";
 import { Point } from "./point";
 
 export class Sketch implements Drawable, Updatable {
@@ -26,6 +26,7 @@ export class Sketch implements Drawable, Updatable {
             for (let i = 0; i < 5; i++) {
                 this.tree.insert(
                     new Point(
+                        this.p,
                         this.p.mouseX + this.p.random(-5, 5),
                         this.p.mouseY + this.p.random(-5, 5)
                     )
@@ -45,7 +46,7 @@ export class Sketch implements Drawable, Updatable {
         this.p.rect(range.x, range.y, range.width, range.height);
 
         this.p.strokeWeight(4);
-        points.forEach((point) => this.p.point(point.x, point.y));
+        points.forEach((dot) => this.p.point(dot.vector.x, dot.vector.y));
         this.p.strokeWeight(1);
     }
 }

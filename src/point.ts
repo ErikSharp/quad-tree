@@ -1,7 +1,14 @@
-export class Point {
-    constructor(public x: number, public y: number) {}
+import { VectorContainer } from "./QuadTreeComponents/vectorContainer";
+import p5, { Vector } from "p5";
 
-    toString() {
-        return `x: ${this.x}, y: ${this.y}`;
+export class Point implements VectorContainer {
+    private _vector: Vector;
+
+    constructor(p: p5, x: number, y: number) {
+        this._vector = p.createVector(x, y);
+    }
+
+    get vector(): Vector {
+        return this._vector;
     }
 }

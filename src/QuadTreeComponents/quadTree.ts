@@ -1,9 +1,9 @@
-import p5, { RECT_MODE } from "p5";
+import p5 from "p5";
 import { Rectangle } from "./rectangle";
-import { Drawable } from "./drawable";
-import { Point } from "./point";
+import { Drawable } from "../drawable";
+import { VectorContainer } from "./vectorContainer";
 
-export class QuadTree<T extends Point> implements Drawable {
+export class QuadTree<T extends VectorContainer> implements Drawable {
     private points: T[] = [];
     private divided = false;
     private northwest: QuadTree<T>;
@@ -36,7 +36,7 @@ export class QuadTree<T extends Point> implements Drawable {
                     if (!this.southeast.insert(point)) {
                         if (!this.southwest.insert(point)) {
                             console.error(
-                                `cannot insert x:${point.x} y:${point.y}`
+                                `cannot insert x:${point.vector.x} y:${point.vector.y}`
                             );
                         }
                     }
@@ -114,7 +114,9 @@ export class QuadTree<T extends Point> implements Drawable {
             this.boundary.height
         );
 
-        this.points.forEach((point) => this.p.point(point.x, point.y));
+        this.points.forEach((point) =>
+            this.p.point(point.vector.x, point.vector.y)
+        );
 
         if (this.divided) {
             this.northeast.draw();
